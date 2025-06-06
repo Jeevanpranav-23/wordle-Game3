@@ -1,38 +1,296 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow: hidden;
+}
+
 .App {
-    text-align: center;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
 }
 
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Roblox-style Game UI */
+.game-ui {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  pointer-events: none;
+  padding: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.stats-panel {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.stat {
+  background: linear-gradient(145deg, #2c3e50, #34495e);
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-width: 100px;
+  text-align: center;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: perspective(1000px) rotateX(5deg);
 }
 
-.App-link {
-    color: #61dafb;
+.stat-label {
+  display: block;
+  font-size: 10px;
+  color: #bdc3c7;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.stat-value {
+  display: block;
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.progress-container {
+  margin-bottom: 20px;
+  max-width: 400px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(145deg, #2c3e50, #34495e);
+  border: 2px solid #3498db;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    #e74c3c 0%, 
+    #f39c12 20%, 
+    #f1c40f 40%, 
+    #2ecc71 60%, 
+    #3498db 80%, 
+    #9b59b6 100%
+  );
+  transition: width 0.3s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    transparent 25%, 
+    rgba(255, 255, 255, 0.1) 25%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    transparent 50%, 
+    transparent 75%, 
+    rgba(255, 255, 255, 0.1) 75%
+  );
+  background-size: 20px 20px;
+  animation: progressStripes 1s linear infinite;
+}
+
+@keyframes progressStripes {
+  0% { background-position: 0 0; }
+  100% { background-position: 20px 0; }
+}
+
+.progress-text {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #bdc3c7;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.controls-hint {
+  background: linear-gradient(145deg, #2c3e50, #34495e);
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  padding: 10px;
+  max-width: 300px;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.controls-hint div {
+  font-size: 11px;
+  color: #bdc3c7;
+  margin-bottom: 2px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Victory Message */
+.victory-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(145deg, #f39c12, #e67e22);
+  border: 4px solid #ffffff;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  z-index: 2000;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  animation: victoryPulse 2s ease-in-out infinite;
+}
+
+.victory-message h1 {
+  font-size: 36px;
+  color: #ffffff;
+  margin-bottom: 15px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+.victory-message p {
+  font-size: 18px;
+  color: #ffffff;
+  margin-bottom: 10px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+@keyframes victoryPulse {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1); 
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.5),
+      inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.05); 
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.6),
+      inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .game-ui {
+    padding: 10px;
+  }
+  
+  .stats-panel {
+    gap: 8px;
+  }
+  
+  .stat {
+    min-width: 80px;
+    padding: 6px 8px;
+  }
+  
+  .stat-label {
+    font-size: 8px;
+  }
+  
+  .stat-value {
+    font-size: 14px;
+  }
+  
+  .progress-container {
+    max-width: 100%;
+  }
+  
+  .controls-hint {
+    max-width: 100%;
+    font-size: 10px;
+  }
+  
+  .victory-message {
+    max-width: 90vw;
+    padding: 20px;
+  }
+  
+  .victory-message h1 {
+    font-size: 24px;
+  }
+  
+  .victory-message p {
+    font-size: 14px;
+  }
+}
+
+/* Smooth transitions */
+.stat, .progress-bar, .controls-hint {
+  transition: all 0.2s ease;
+}
+
+.stat:hover {
+  transform: perspective(1000px) rotateX(5deg) scale(1.02);
+  border-color: #e74c3c;
+}
+
+/* Additional animations */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.stats-panel {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.progress-container {
+  animation: slideInLeft 0.7s ease-out;
+}
+
+.controls-hint {
+  animation: slideInLeft 0.9s ease-out;
+}
+
+/* Canvas styling */
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure UI elements don't interfere with canvas interactions */
+.game-ui * {
+  pointer-events: none;
+  user-select: none;
 }
